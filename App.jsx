@@ -6,7 +6,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Paper from '@material-ui/core/Paper';
-
+import DateTables from 'material-ui-datatables';
 class App extends React.Component {
 
   render() {
@@ -26,10 +26,24 @@ class UserTable extends React.Component {
     console.log(localStorage.getItem('authToken'));
     super();
     this.state = {
+      headers: [
+        {
+          key: 'email',
+          label: 'Email'
+        },
+        {
+          key: 'firstName',
+          label: 'First Name'
+        },
+        {
+          key: 'lastName',
+          label: 'Last Name'
+        }
+      ],
       data: []
     };
 
-    fetch('http://localhost:3000/users', {
+  /*  fetch('http://localhost:3000/users', {
       method: "GET",
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('authToken') }
     }).then((response) => {
@@ -39,23 +53,11 @@ class UserTable extends React.Component {
       this.setState({
         data: response.data
       });
-      // this.state = { data: response.data };
-      /*
-      if(response.success === false ) {
-        this.setState({
-          isEmailError: true,
-          emailError: response.msg,
-        });
-      } else {
-        localStorage.setItem('authToken', response.token);
-        this.setState({
-          redirect: true
-        });
-      }*/
+
     }).catch ((error) => {
       console.log('In Error');
     });
-
+*/
     /*this.state = {
       data: [
         {
@@ -84,6 +86,7 @@ class UserTable extends React.Component {
 
   render() {
     return (
+      <div>
       <table>
         <thead>
           <tr>
@@ -101,6 +104,15 @@ class UserTable extends React.Component {
           {this.state.data.map((user, i) => <UserTableRow key = {i} data = {user} /> )}
         </tbody>
       </table>
+
+      <DateTables
+        columns={this.state.headers}
+        data={this.state.data}
+        page={1}
+        count={0}
+        />
+    </div>
+
     );
   }
 }
