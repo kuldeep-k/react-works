@@ -6,7 +6,9 @@ var config = {
   },
   devServer: {
     inline: true,
-    port: 3500
+    port: 3500,
+    historyApiFallback: true,
+    contentBase: './'
   },
   module: {
     rules: [
