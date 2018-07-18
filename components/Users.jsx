@@ -4,6 +4,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Tooltip from '@material-ui/core/Tooltip';
+import TablePagination from '@material-ui/core/TablePagination';
 
 class UserTable extends React.Component {
   constructor() {
@@ -22,12 +25,29 @@ class UserTable extends React.Component {
         {
           key: 'lastName',
           label: 'Last Name'
+        },
+        {
+          key: 'dob',
+          label: 'Date of Birth'
+        },
+        {
+          key: 'education',
+          label: 'Education'
+        },
+        {
+          key: 'occupation',
+          label: 'Occupation'
+        },
+        {
+          key: 'currentLocation',
+          label: 'Current Location'
         }
+
       ],
       data: []
     };
 
-  fetch('http://localhost:3000/users', {
+    fetch('http://localhost:3000/users', {
       method: "GET",
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('authToken') }
     }).then((response) => {
@@ -42,62 +62,35 @@ class UserTable extends React.Component {
       console.log('In Error');
     });
 
-    /*this.state = {
-      data: [
-        {
-          "id": 1,
-          "name": "frodo",
-          "age": 20
-        },
-        {
-          "id": 2,
-          "name": "sam",
-          "age": 22
-        },
-        {
-          "id": 3,
-          "name": "pippin",
-          "age": 16
-        },
-        {
-          "id": 4,
-          "name": "merry",
-          "age": 18
-        }
-      ]
-    }*/
   }
+  createSortHandler(key) {
 
-  handleFilterValueChange(value) {
-    // your filter logic
-  }
-
-  handleSortOrderChange (key, order) {
-    // your sort logic
-  }
-
-  handleCellClick (value) {
-    // your filter logic
-  }
-
-  handleCellDoubleClick(key, order) {
-    // your sort logic
   }
 
   render() {
+    const orderBy = 'email';
+    const order = 1;
     return (
       <div>
 
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Email</TableCell>
-            <TableCell>First Name</TableCell>
-            <TableCell>Last Name</TableCell>
-            <TableCell>DOB</TableCell>
-            <TableCell>Education</TableCell>
-            <TableCell>Occupation</TableCell>
-            <TableCell>Current Location</TableCell>
+            {this.state.headers.map( (column) => {
+              return <TableCell>
+                /*<Tooltip
+                  title="Sort"
+                  placement={'bottom-end'}
+                  enterDelay={300}
+                >
+                  <TableSortLabel
+                    active={orderBy === column.key}
+                    direction={order}
+                    onClick={this.createSortHandler(column.key)}
+                  >*/
+                {column.label}/*</TableSortLabel></Tooltip>*/</TableCell>
+            })}
+
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -118,8 +111,21 @@ class UserTable extends React.Component {
         </TableBody>
       </Table>
 
-    </div>
 
+    /*<TablePagination
+          component="div"
+          count={12}
+          rowsPerPage={5}
+          page={1}
+          backIconButtonProps={{
+            'aria-label': 'Previous Page',
+          }}
+          nextIconButtonProps={{
+            'aria-label': 'Next Page',
+          }}
+
+        /> */
+      </div>
     );
   }
 }
