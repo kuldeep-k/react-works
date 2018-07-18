@@ -64,12 +64,35 @@ class UserTable extends React.Component {
 
   }
   createSortHandler(key) {
+    const orderBy = key;
+    let order = 'desc';
 
+    if (this.state.orderBy === key ) {
+      if (this.state.order === 'desc') {
+        order = 'asc';
+      } else {
+        order = 'desc';
+      }
+    } else {
+      order = 'asc';
+    }
   }
 
   render() {
+    /*<Tooltip
+      title="Sort"
+      placement={'bottom-end'}
+      enterDelay={300}
+    >
+      <TableSortLabel
+        active={orderBy === column.key}
+        direction={order}
+        onClick={this.createSortHandler(column.key)}
+      >*/
+     /*{column.label}*/ /*</TableSortLabel></Tooltip>*/
     const orderBy = 'email';
-    const order = 1;
+    const order = 'asc';
+    console.log(this.state.headers);
     return (
       <div>
 
@@ -78,17 +101,11 @@ class UserTable extends React.Component {
           <TableRow>
             {this.state.headers.map( (column) => {
               return <TableCell>
-                /*<Tooltip
-                  title="Sort"
-                  placement={'bottom-end'}
-                  enterDelay={300}
-                >
-                  <TableSortLabel
-                    active={orderBy === column.key}
-                    direction={order}
-                    onClick={this.createSortHandler(column.key)}
-                  >*/
-                {column.label}/*</TableSortLabel></Tooltip>*/</TableCell>
+                <TableSortLabel active={orderBy === column.key}
+                  direction={order}
+                  onClick={this.createSortHandler(column.key)}>
+                  {column.label} {column.key}
+                </TableSortLabel></TableCell>
             })}
 
             <TableCell>Actions</TableCell>
@@ -112,7 +129,7 @@ class UserTable extends React.Component {
       </Table>
 
 
-    /*<TablePagination
+    <TablePagination
           component="div"
           count={12}
           rowsPerPage={5}
@@ -124,7 +141,7 @@ class UserTable extends React.Component {
             'aria-label': 'Next Page',
           }}
 
-        /> */
+        />
       </div>
     );
   }
