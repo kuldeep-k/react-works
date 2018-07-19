@@ -3,7 +3,7 @@ import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-import TableBody from '@material-ui/core/TableBody';
+import TableBody from '@material-ui/core/TableBody' ;
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -44,10 +44,24 @@ class UserTable extends React.Component {
         }
 
       ],
-      data: []
+      data: [],
+      sort: {
+        orderBy: 'email',
+        order: 'asc'
+      },
+      page: {
+        page: 0,
+        pageSize: 5
+      },
     };
 
-    fetch('http://localhost:3000/users', {
+    this.getUserData();
+
+  }
+
+  getUserData() {
+    let url = 'http://localhost:3000/users?page=' + this.state.page.page + '&pageSize=' + this.state.page.pageSize + '&osrtBy=' + this.state.sort.orderBy + '&sortOrder=' + this.state.sort.order;
+    fetch(url, {
       method: "GET",
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('authToken') }
     }).then((response) => {
@@ -57,25 +71,44 @@ class UserTable extends React.Component {
       this.setState({
         data: response.data
       });
-
     }).catch ((error) => {
       console.log('In Error');
     });
-
   }
-  createSortHandler(key) {
-    const orderBy = key;
-    let order = 'desc';
 
-    if (this.state.orderBy === key ) {
-      if (this.state.order === 'desc') {
-        order = 'asc';
+  createSortHandler(key) {
+    // const orderBy = key;
+    // let order = 'asc';
+
+    if (this.state.sort.orderBy === key ) {
+      if (this.state.sort.order === 'desc') {
+        this.setState({
+          sort: {
+            order: 'asc',
+            orderBy: key,
+          }
+        });
+        // this.state.sort.order = 'asc';
       } else {
-        order = 'desc';
+        this.setState({
+          sort: {
+            order: 'desc',
+            orderBy: key,
+          }
+        });
+        // this.state.sort.order = 'desc';
       }
     } else {
-      order = 'asc';
+      this.setState({
+        sort: {
+          order: 'asc',
+          orderBy: key,
+        }
+      });
+      // this.state.sort.order = 'asc';
     }
+    // this.state.sort.orderBy = key;
+    this.getUserData();
   }
 
   render() {
@@ -101,10 +134,10 @@ class UserTable extends React.Component {
           <TableRow>
             {this.state.headers.map( (column) => {
               return <TableCell>
-                <TableSortLabel active={orderBy === column.key}
-                  direction={order}
+                <TableSortLabel active={this.state.sort.orderBy === column.key}
+                  direction={this.state.sort.order}
                   onClick={this.createSortHandler(column.key)}>
-                  {column.label} {column.key}
+                  {column.label}
                 </TableSortLabel></TableCell>
             })}
 
